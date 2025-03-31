@@ -1,4 +1,6 @@
-pragma solidity ^0.4.24;
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * Math operations with safety checks
@@ -41,7 +43,7 @@ contract Ownable {
     address indexed newOwner
   );
 
-  constructor () public{
+  constructor () {
     owner = msg.sender;
   }
 
@@ -67,8 +69,8 @@ contract ERC20StdToken is Ownable, SafeMath {
 	uint8   public decimals;
 	string  public symbol;
 	bool    public isMint;     // 是否可增发
-    bool    public isBurn;    // 是否可销毁
-    bool    public isFreeze; // 是否可冻结
+  bool    public isBurn;    // 是否可销毁
+  bool    public isFreeze; // 是否可冻结
 
   mapping (address => uint256) public balanceOf;
   mapping (address => uint256) public freezeOf;
@@ -76,13 +78,13 @@ contract ERC20StdToken is Ownable, SafeMath {
 
   constructor(
     address _owner,
-    string _name,
-    string _symbol,
+    string memory _name,
+    string memory _symbol,
     uint8 _decimals,
     uint256 _initialSupply,
     bool _isMint,
     bool _isBurn,
-    bool _isFreeze) public {
+    bool _isFreeze) {
     require(_owner != address(0));
     owner             = _owner;
   	decimals          = _decimals;
@@ -114,12 +116,12 @@ contract ERC20StdToken is Ownable, SafeMath {
    success = true;
  }
 
- /// @notice send `_value` token to `_to` from `msg.sender`
- /// @param _to The address of the recipient
- /// @param _value The amount of token to be transferred
- /// @return Whether the transfer was successful or not
- function transfer(address _to, uint256 _value) public returns (bool success) {
-   require(_to != 0);
+/// @notice send `_value` token to `_to` from `msg.sender`
+/// @param _to The address of the recipient
+/// @param _value The amount of token to be transferred
+/// @return success Whether the transfer was successful or not
+function transfer(address _to, uint256 _value) public returns (bool success) {
+   require(_to != address(0));
    require(balanceOf[msg.sender] >= _value);
    require(balanceOf[_to] + _value >= balanceOf[_to]);
    // balanceOf[msg.sender] -= _value;
@@ -136,9 +138,9 @@ contract ERC20StdToken is Ownable, SafeMath {
  /// @param _from The address of the sender
  /// @param _to The address of the recipient
  /// @param _value The amount of token to be transferred
- /// @return Whether the transfer was successful or not
+ /// @return success Whether the transfer was successful or not
  function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-   require(_to != 0);
+   require(_to != address(0));
    require(balanceOf[_from] >= _value);
    require(allowance[_from][msg.sender] >= _value);
    require(balanceOf[_to] + _value >= balanceOf[_to]);
